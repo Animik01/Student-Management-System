@@ -8,6 +8,7 @@ import UpdateStudent from "../Pages/UpdateStudent";
 
 export default function ExistingStudent() {
   const [Data, setData] = useState([]);
+  const [successMessage, setSuccessMessage] = useState(null);
 
   const [formData, setFormData] = useState({
     std_first_name: "",
@@ -22,23 +23,54 @@ export default function ExistingStudent() {
     created_dt: moment(new Date()).format("DD-MM-YYYY"),
     flag: "0",
   });
+  
+  const FetchData = async () => {
+    try {
+      let Responce = await postData(formData);
+      // setSuccessMessage('Data submitted successfully!')
+      if (Responce != null) {
+        setData(Responce.student_data);
+      }
+      // console.log("Responce", Responce.student_data);
+    } catch (error) {
+      console.error("Error in form submission:", error);
+      // Handle errors or show a user-friendly message
+    }
+  };
 
   useEffect(() => {
-    const FetchData = async () => {
-      try {
-        let Responce = await postData(formData);
-        // setSuccessMessage('Data submitted successfully!')
-        if (Responce != null) {
-          setData(Responce.student_data);
-        }
-        // console.log("Responce", Responce.student_data);
-      } catch (error) {
-        console.error("Error in form submission:", error);
-        // Handle errors or show a user-friendly message
-      }
-    };
     FetchData();
   }, []);
+
+  const DeleteItem = async (index) => {
+    console.log("Data", Data[index]);
+    let query = {
+      std_first_name: Data[index].std_first_name,
+      std_last_name: "",
+      std_mobile: "",
+      std_email: "",
+      std_address: "",
+      std_city: "",
+      std_state: "",
+      std_pincode: "",
+      created_by: "",
+      created_dt: "",
+      flag: "2",
+    };
+    try {
+      let Responce = await postData(query);
+      setSuccessMessage("Data Deleted successfully!");
+      FetchData();
+    } catch (error) {
+      console.error("Error in form submission:", error);
+      // Handle errors or show a user-friendly message
+    }
+  };
+
+  const closealart = () => {
+    setSuccessMessage(null);
+    document.getElementById("myForm").reset();
+  };
 
   return (
     <div>
@@ -155,7 +187,11 @@ export default function ExistingStudent() {
                           Update
                         </button>
                       </Link>
-                      <button type="button" class="btn btn-danger">
+                      <button
+                        type="button"
+                        class="btn btn-danger"
+                        onClick={() => DeleteItem(index)}
+                      >
                         Delete
                       </button>
                     </td>
@@ -197,6 +233,27 @@ export default function ExistingStudent() {
           </li>
         </ul>
       </nav>
+      {successMessage && (
+        <div
+          class="alert alert-success alart-dismissible d-flex justify-content-between w-25 z-3 position-absolute  rounded-3 mx-5"
+          role="alert"
+        >
+          {successMessage}
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="16"
+            height="16"
+            fill="currentColor"
+            class="bi bi-x-circle"
+            viewBox="0 0 16 16"
+            onClick={closealart}
+            style={{ color: "red" }}
+          >
+            <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16" />
+            <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708" />
+          </svg>
+        </div>
+      )}
       <Footer />
     </div>
   );
