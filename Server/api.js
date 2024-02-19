@@ -12,10 +12,10 @@ const pool = new Pool({
   database: process.env.DB_DATABASE,
   password: process.env.DB_PASSWORD,
   port: process.env.DB_PORT,
-  ssl: require,
+  ssl : require
 });
 
-//Crud Operation
+//Create the data
 router.post("/data", async (req, res) => {
   try {
     const {
@@ -55,5 +55,84 @@ router.post("/data", async (req, res) => {
   }
 });
 
+//Read the data
+
+router.get("/data", async (req, res) => {
+  try {
+    const result = await pool.query("SELECT * FROM sms.students_details");
+    res.json(result.rows);
+  } catch (error) {
+    console.error("Error executing query", error);
+    res.status(500).send("Internal Server Error");
+  }
+});
+
+//Update the data
+
+router.put("/data/:id", async (req, res) => {
+  try {
+    const { std_id } = req.params;
+    const {
+      std_first_name,
+      std_last_name,
+      std_mobile,
+      std_email,
+      std_address,
+      std_city,
+      std_state,
+      std_pincode,
+      created_by,
+      created_dt,
+    } = req.body;
+
+    const result = await pool.query(
+      "UPDATE sms.students_details SET std_first_name = $1, std_last_name = $2, std_mobile = $3, std_email = $4, std_address = $5, std_city = $6, std_state = $7, std_pincode = $8, created_by = $9, created_dt = $10 WHERE std_id = $11 RETURNING *",
+      [
+        std_first_name,
+        std_last_name,
+        std_mobile,
+        std_email,
+        std_address,
+        std_city,
+        std_state,
+        std_pincode,
+        created_by,
+        created_dt,
+        std_id,
+      ]
+    );
+
+    if (result.rows.length === 0) {
+      res.status(404).send("Data not found");
+    } else {
+      res.json(result.rows[0]);
+    }
+  } catch (error) {
+    console.error("Error executing query", error);
+    res.status(500).send("Internal Server Error");
+  }
+});
+
+//Delete the data
+
+router.delete("/data/:id", async (req, res) => {
+  try {
+    const { std_id } = req.params;
+
+    const result = await pool.query(
+      "DELETE FROM sms.students_details WHERE std_id = $1 RETURNING *",
+      [std_id]
+    );
+
+    if (result.rows.length === 0) {
+      res.status(404).send("Data not found");
+    } else {
+      res.json(result.rows[0]);
+    }
+  } catch (error) {
+    console.error("Error executing query", error);
+    res.status(500).send("Internal Server Error");
+  }
+});
 
 module.exports = router;

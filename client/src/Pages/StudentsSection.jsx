@@ -19,6 +19,7 @@ export default function StudentsSection() {
     flag: "1",
   });
 
+  const [Loader, setLoader] = useState(false);
   const [successMessage, setSuccessMessage] = useState(null);
   const [error, seterror] = useState(null);
   const handleChange = (e) => {
@@ -28,6 +29,7 @@ export default function StudentsSection() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoader(true)
     console.log("formData", formData);
     try {
       let res = await postData(formData);
@@ -36,6 +38,7 @@ export default function StudentsSection() {
       console.error("Error in form submission:", error);
       // Handle errors or show a user-friendly message
     }
+    setLoader(false)
   };
   const closealart = () => {
     seterror(null);
@@ -46,6 +49,16 @@ export default function StudentsSection() {
   return (
     <div>
       <Navbar />
+      {Loader == true && (
+        <div class="text-center pt-5 z-3 position-relative">
+          <div
+            class="spinner-border"
+            style={{ width: "3rem", height: "3rem", color: "blue" }}
+            role="status"
+          ></div>
+        </div>
+      )}
+
       {/* {successMessage && <Alert variant="success">{successMessage}</Alert>} */}
       <div className="container mt-5">
         <form className="row g-3" id="myForm" onSubmit={handleSubmit}>
