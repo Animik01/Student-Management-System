@@ -9,18 +9,19 @@ export default function ExistingStudent() {
   const [Data, setData] = useState([]);
   const [successMessage, setSuccessMessage] = useState(null);
   const [loader, setLoader] = useState(true);
+  const [dloader, setDLoader] = useState(false);
 
   const [formData, setFormData] = useState({
-    std_first_name: "",
-    std_last_name: "",
-    std_mobile: "",
-    std_email: "",
-    std_address: "",
-    std_city: "",
-    std_state: "",
-    std_pincode: "",
-    created_by: "Animik",
-    created_dt: moment(new Date()).format("DD-MM-YYYY"),
+    std_first_name: null,
+    std_last_name: null,
+    std_mobile: null,
+    std_email: null,
+    std_address: null,
+    std_city: null,
+    std_state: null,
+    std_pincode: null,
+    created_by: null,
+    created_dt: null,
     flag: "0",
   });
 
@@ -45,6 +46,8 @@ export default function ExistingStudent() {
 
   const DeleteItem = async (index) => {
     console.log("Data", Data[index]);
+    setDLoader(true);
+    setDLoader();
     let query = {
       std_first_name: Data[index].std_first_name,
       std_last_name: "",
@@ -66,7 +69,9 @@ export default function ExistingStudent() {
       console.error("Error in form submission:", error);
       // Handle errors or show a user-friendly message
     }
+    setDLoader(false);
   };
+  console.log("dloader", dloader);
 
   const closealart = () => {
     setSuccessMessage(null);
@@ -184,19 +189,34 @@ export default function ExistingStudent() {
                         <td>{row.std_first_name + " " + row.std_last_name}</td>
                         <td>{row.std_email}</td>
                         <td>{row.std_mobile}</td>
-                        <td>
-                          <Link to={"/update-student"}>
+                        <td class="text-center">
+                          <Link to={`/update-student/${row.std_first_name}`}>
                             <button type="button" class="btn btn-warning m-2">
                               Update
                             </button>
                           </Link>
-                          <button
-                            type="button"
-                            class="btn btn-danger"
-                            onClick={() => DeleteItem(index)}
-                          >
-                            Delete
-                          </button>
+                          {dloader.index + "d" == true ? (
+                            <button
+                              class="btn btn-danger"
+                              type="button"
+                              disabled
+                            >
+                              <span
+                                class="spinner-border spinner-border-sm"
+                                role="status"
+                                aria-hidden="true"
+                              ></span>
+                              Deleting...
+                            </button>
+                          ) : (
+                            <button
+                              type="button"
+                              class="btn btn-danger"
+                              onClick={() => DeleteItem(index)}
+                            >
+                              Delete
+                            </button>
+                          )}
                         </td>
                       </tr>
                     ))}
@@ -263,7 +283,7 @@ export default function ExistingStudent() {
         <div class="text-center pt-5">
           <div
             class="spinner-border"
-            style={{ width: "3rem", height: "3rem",color:"blue" }}
+            style={{ width: "3rem", height: "3rem", color: "blue" }}
             role="status"
           ></div>
         </div>

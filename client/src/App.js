@@ -13,7 +13,7 @@ function App(props) {
         <Routes>
           <Route path="/" element={<Login />} />
           <Route path="/home" element={<Home />} />
-          <Route path="/update-student" element={<UpdateStudent />} />
+          <Route path="/update-student/:index" element={<UpdateStudent />} />
           <Route path="/new-students-area" element={<StudentsSection />} />
           <Route path="/existing-students-area" element={<ExistingStudent />} />
         </Routes>
