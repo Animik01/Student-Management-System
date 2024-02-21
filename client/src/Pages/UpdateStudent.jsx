@@ -15,7 +15,8 @@ const UpdateStudent = ({ students }) => {
   const student = index;
 
   const [formData, setFormData] = useState({
-    std_first_name: student,
+    std_id: student,
+    std_first_name: null,
     std_last_name: null,
     std_mobile: null,
     std_email: null,
@@ -50,7 +51,7 @@ const UpdateStudent = ({ students }) => {
     e.preventDefault();
     setLoader(true);
     console.log("formData", formData);
-    Data.flag = "1";
+    Data.flag = "3";
     try {
       let res = await postData(Data);
       setSuccessMessage("Data submitted successfully!");

@@ -37,12 +37,12 @@ function Navbar() {
                   <Link class="nav-link mx-2" to="/add-Student">
                     Add Student
                   </Link>
-                </li> */}
+                </li> 
                 <li class="nav-item">
                   <Link class="nav-link mx-2" href="#">
                     Attendence
                   </Link>
-                </li>
+                </li>*/}
                 <li class="nav-item">
                   <Link class="nav-link mx-4" to="/">
                     Log Out

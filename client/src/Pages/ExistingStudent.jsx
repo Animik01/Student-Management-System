@@ -9,9 +9,10 @@ export default function ExistingStudent() {
   const [Data, setData] = useState([]);
   const [successMessage, setSuccessMessage] = useState(null);
   const [loader, setLoader] = useState(true);
-  const [dloader, setDLoader] = useState(false);
+  // const [dloader, setDLoader] = useState(false);
 
   const [formData, setFormData] = useState({
+    std_id: null,
     std_first_name: null,
     std_last_name: null,
     std_mobile: null,
@@ -46,10 +47,11 @@ export default function ExistingStudent() {
 
   const DeleteItem = async (index) => {
     console.log("Data", Data[index]);
-    setDLoader(true);
-    setDLoader();
+    // setDLoader(true);
+    // setDLoader();
     let query = {
-      std_first_name: Data[index].std_first_name,
+      std_id: Data[index].std_id,
+      std_first_name: "",
       std_last_name: "",
       std_mobile: "",
       std_email: "",
@@ -69,9 +71,9 @@ export default function ExistingStudent() {
       console.error("Error in form submission:", error);
       // Handle errors or show a user-friendly message
     }
-    setDLoader(false);
+    // setDLoader(false);
   };
-  console.log("dloader", dloader);
+  // console.log("dloader", dloader);
 
   const closealart = () => {
     setSuccessMessage(null);
@@ -190,33 +192,18 @@ export default function ExistingStudent() {
                         <td>{row.std_email}</td>
                         <td>{row.std_mobile}</td>
                         <td class="text-center">
-                          <Link to={`/update-student/${row.std_first_name}`}>
+                          <Link to={`/update-student/${row.std_id}`}>
                             <button type="button" class="btn btn-warning m-2">
                               Update
                             </button>
                           </Link>
-                          {dloader.index + "d" == true ? (
-                            <button
-                              class="btn btn-danger"
-                              type="button"
-                              disabled
-                            >
-                              <span
-                                class="spinner-border spinner-border-sm"
-                                role="status"
-                                aria-hidden="true"
-                              ></span>
-                              Deleting...
-                            </button>
-                          ) : (
-                            <button
-                              type="button"
-                              class="btn btn-danger"
-                              onClick={() => DeleteItem(index)}
-                            >
-                              Delete
-                            </button>
-                          )}
+                          <button
+                            type="button"
+                            class="btn btn-danger"
+                            onClick={() => DeleteItem(index)}
+                          >
+                            Delete
+                          </button>
                         </td>
                       </tr>
                     ))}

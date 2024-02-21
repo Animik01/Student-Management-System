@@ -6,6 +6,7 @@ import moment from "moment";
 
 export default function StudentsSection() {
   const [formData, setFormData] = useState({
+    std_id:"",
     std_first_name: "",
     std_last_name: "",
     std_mobile: "",
