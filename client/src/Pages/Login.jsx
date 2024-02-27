@@ -1,10 +1,27 @@
 /* eslint-disable jsx-a11y/img-redundant-alt */
-import React from "react";
+import React, { useState } from "react";
 import "./Page.css";
 import img from "../Images/img2.webp";
 import { Link } from "react-router-dom";
+import usersData from "../Data/users.json";
 
-export default function Login() {
+export default function Login({ onLogin }) {
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+
+  const handleLogin = () => {
+    const user = usersData.find(
+      (u) => u.username === username && u.password === password
+    );
+    if (user) {
+      onLogin(user.username);
+    } else {
+      setError("Invalid credentials. Please try again.");
+      alert("Invalid credentials. Please try again.");
+    }
+  };
+
   return (
     <div className="body p-5">
       <div className="container mx-auto">
@@ -23,19 +40,23 @@ export default function Login() {
                 <form>
                   <div className="form-floating mb-3">
                     <input
-                      type="email"
+                      type="text"
+                      placeholder="Username"
+                      value={username}
+                      onChange={(e) => setUsername(e.target.value)}
                       className="form-control"
                       id="floatingInput"
-                      placeholder="name@example.com"
                     />
                     <label for="floatingInput">Username</label>
                   </div>
                   <div className="form-floating mb-3">
                     <input
                       type="password"
+                      placeholder="Password"
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
                       className="form-control"
                       id="floatingPassword"
-                      placeholder="Password"
                     />
                     <label for="floatingPassword">Password</label>
                   </div>
@@ -56,11 +77,13 @@ export default function Login() {
                   </div>
                   <div className="d-grid">
                     <Link
-                      to={"/home"}
+                      to={"/"}
+                      onClick={handleLogin}
                       className="text-decoration-none btn btn-primary btn-login text-uppercase fw-bold"
                     >
                       Sign in
                     </Link>
+                    {error && <div style={{ color: "red" }}>{error}</div>}
                   </div>
                   <hr className="my-4" />
                   <div className="d-grid mb-2">

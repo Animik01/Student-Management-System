@@ -1,8 +1,18 @@
-import { React } from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import img from "../Images/img3.png";
 
 function Navbar() {
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [username, setUsername] = useState("");
+
+  const handleLogout = () => {
+    setIsLoggedIn(false);
+    setUsername("");
+    sessionStorage.removeItem("username");
+    window. location. reload(); 
+  };
+  
   return (
     <div>
       <nav className="navbar navbar-expand-lg navbar-light bg-light">
@@ -29,7 +39,7 @@ function Navbar() {
             <div class="collapse navbar-collapse" id="navbarNavDropdown">
               <ul class="navbar-nav ms-auto nav-tabs">
                 <li class="nav-item">
-                  <Link class="nav-link mx-2" aria-current="page" to="/home">
+                  <Link class="nav-link mx-2" aria-current="page" to="/">
                     Home
                   </Link>
                 </li>
@@ -44,7 +54,7 @@ function Navbar() {
                   </Link>
                 </li>*/}
                 <li class="nav-item">
-                  <Link class="nav-link mx-4" to="/">
+                  <Link class="nav-link mx-4" onClick={handleLogout} to="/login">
                     Log Out
                   </Link>
                 </li>
