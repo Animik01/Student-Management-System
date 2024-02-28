@@ -10,9 +10,9 @@ function Navbar() {
     setIsLoggedIn(false);
     setUsername("");
     sessionStorage.removeItem("username");
-    window. location. reload(); 
+    window.location.reload();
   };
-  
+
   return (
     <div>
       <nav className="navbar navbar-expand-lg navbar-light bg-light">
@@ -36,41 +36,29 @@ function Navbar() {
             <span className="navbar-toggler-icon"></span>
           </button>
           <div className="collapse navbar-collapse" id="navbarTogglerDemo02">
-            <div class="collapse navbar-collapse" id="navbarNavDropdown">
-              <ul class="navbar-nav ms-auto nav-tabs">
-                <li class="nav-item">
-                  <Link class="nav-link mx-2" aria-current="page" to="/">
-                    Home
-                  </Link>
-                </li>
-                {/* <li class="nav-item">
-                  <Link class="nav-link mx-2" to="/add-Student">
-                    Add Student
-                  </Link>
-                </li> 
-                <li class="nav-item">
-                  <Link class="nav-link mx-2" href="#">
-                    Attendence
-                  </Link>
-                </li>*/}
-                <li class="nav-item">
-                  <Link class="nav-link mx-4" onClick={handleLogout} to="/login">
-                    Log Out
-                  </Link>
-                </li>
-              </ul>
-            </div>
-            <form className="d-flex pl-5">
-              <input
-                className="form-control me-2"
-                type="search"
-                placeholder="Search"
-                aria-label="Search"
-              />
-              <button className="btn btn-outline-success" type="submit">
-                Search
-              </button>
-            </form>
+            <ul class="navbar-nav ms-auto">
+              <li class="nav-item">
+                <Link class="nav-link mx-2" aria-current="page" to="/">
+                  Home
+                </Link>
+              </li>
+              <li class="nav-item">
+                <Link class="nav-link mx-2" to="/add-Student">
+                  Add Student
+                </Link>
+              </li>
+              <li class="nav-item">
+                <Link class="nav-link mx-2" href="#">
+                  Attendence
+                </Link>
+              </li>
+              <li class="nav-item"></li>
+            </ul>
+            <button className="btn btn-outline-primary mx-3">
+              <Link class="nav-link" onClick={handleLogout} to="/login">
+                Log Out
+              </Link>
+            </button>
           </div>
         </div>
       </nav>

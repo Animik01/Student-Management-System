@@ -4,12 +4,12 @@ import Footer from "../Components/Footer";
 import { Link } from "react-router-dom";
 import postData from "../api/apiService";
 import moment from "moment";
-
+import "./style.css";
 export default function ExistingStudent() {
   const [Data, setData] = useState([]);
   const [successMessage, setSuccessMessage] = useState(null);
   const [loader, setLoader] = useState(true);
-  // const [dloader, setDLoader] = useState(false);
+  const [sloader, setSLoader] = useState(false);
 
   const [formData, setFormData] = useState({
     std_id: null,
@@ -25,6 +25,8 @@ export default function ExistingStudent() {
     created_dt: null,
     flag: "0",
   });
+
+  const [searchItem, setSearchItem] = useState("");
 
   const FetchData = async () => {
     try {
@@ -80,6 +82,38 @@ export default function ExistingStudent() {
     document.getElementById("myForm").reset();
   };
 
+  const HandleSearch = async () => {
+    setSLoader(true);
+    console.log("searchItem", searchItem);
+    if (searchItem != null || searchItem !== "") {
+      let query = {
+        std_id: "",
+        std_first_name: "",
+        std_last_name: "",
+        std_mobile: "",
+        std_email: "",
+        std_address: "",
+        std_city: "",
+        std_state: "",
+        std_pincode: "",
+        created_by: "",
+        created_dt: "",
+        flag: searchItem,
+      };
+      try {
+        let Responce = await postData(query);
+        if (Responce != null) {
+          setData(Responce.student_data);
+        }
+      } catch (error) {
+        console.error("Error in form submission:", error);
+      }
+    } else {
+      FetchData();
+    }
+    setSLoader(false);
+  };
+
   return (
     <div>
       <Navbar />
@@ -94,6 +128,7 @@ export default function ExistingStudent() {
                     <p>Manage students and records</p>
                   </div>
                 </div>
+
                 <div class="row">
                   <div class="col-xl-3 col-sm-6 col-12">
                     <div class="card">
@@ -112,52 +147,35 @@ export default function ExistingStudent() {
                       </div>
                     </div>
                   </div>
-                  <div class="col-xl-3 col-sm-6 col-12">
+                  <div class="col-xl-9 col-sm-6 col-12">
                     <div class="card">
                       <div class="card-content">
                         <div class="card-body">
-                          <div class="media d-flex">
-                            <div class="align-self-center">
-                              <i class="icon-speech warning font-large-2 float-left"></i>
-                            </div>
-                            <div class="media-body text-right">
-                              <h3>156</h3>
-                              <span>New Comments</span>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="col-xl-3 col-sm-6 col-12">
-                    <div class="card">
-                      <div class="card-content">
-                        <div class="card-body">
-                          <div class="media d-flex">
-                            <div class="align-self-center">
-                              <i class="icon-graph success font-large-2 float-left"></i>
-                            </div>
-                            <div class="media-body text-right">
-                              <h3>64.89 %</h3>
-                              <span>Bounce Rate</span>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="col-xl-3 col-sm-6 col-12">
-                    <div class="card">
-                      <div class="card-content">
-                        <div class="card-body">
-                          <div class="media d-flex">
-                            <div class="align-self-center">
-                              <i class="icon-pointer danger font-large-2 float-left"></i>
-                            </div>
-                            <div class="media-body text-right">
-                              <h3>423</h3>
-                              <span>Total Visits</span>
-                            </div>
+                          <div class="search col-md-12 d-flex">
+                            <i class="fa fa-search"></i>
+                            <input
+                              type="text"
+                              class="form-control"
+                              placeholder="Search by Name, Email, Mobile no."
+                              onChange={(e) => setSearchItem(e.target.value)}
+                            />
+                            {sloader == false ? (
+                              <button
+                                class="btn btn-primary mx-4"
+                                onClick={() => HandleSearch()}
+                              >
+                                Search
+                              </button>
+                            ) : (
+                              <button class="btn btn-primary mx-4">
+                                <span
+                                  className="spinner-border spinner-border-sm mx-2"
+                                  role="status"
+                                  aria-hidden="true"
+                                ></span>
+                                Search
+                              </button>
+                            )}
                           </div>
                         </div>
                       </div>
