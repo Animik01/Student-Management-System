@@ -187,8 +187,8 @@ export default function ExistingStudent() {
           </div>
 
           {Data && Data.length > 0 ? (
-            <div className="container">
-              <table class="table table-bordered">
+            <div className="container border rounded">
+              <table class="table table-striped ">
                 <thead>
                   <tr>
                     <th scope="col">Serial No</th>
